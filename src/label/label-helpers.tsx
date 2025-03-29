@@ -1,5 +1,5 @@
 /**********************************************************************************
- * Copyright (c) 2025 Company and others.
+ * Copyright (c) 2025 EclipseSource and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License as outlined in the LICENSE file.
@@ -8,7 +8,7 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Tooltip, TooltipTrigger, TooltipContent } from '../tooltip/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
 
 export function createHighlightedText(label?: string, highlights?: [number, number][]): React.JSX.Element {
     if (label === undefined) {
@@ -48,7 +48,7 @@ export function createHighlightedText(label?: string, highlights?: [number, numb
 }
 
 export function createLabelWithTooltip(child: React.JSX.Element, tooltip?: string): React.JSX.Element {
-    const label = <div className='tree-label flex-auto flex align-items-center'>{child}</div>;
+    const label = <div className='tree-label'>{child}</div>;
 
     if (tooltip === undefined) {
         return label;
