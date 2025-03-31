@@ -1,6 +1,6 @@
 # UI Components for Visual Studio Code Extensions
 
-This is UI component library for WebViews for Visual Studio Code extensions.
+This is a UI component library for developing WebViews in Visual Studio Code extensions.
 
 ## Project Structure
 
