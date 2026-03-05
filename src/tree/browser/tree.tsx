@@ -14,7 +14,9 @@ import classNames from 'classnames';
 import { Resizable } from 're-resizable';
 import { default as React, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { debounce } from 'throttle-debounce';
+import { HOST_EXTENSION } from 'vscode-messenger-common';
 import { findNestedValue } from '../../base';
+import { messenger } from '../../browser-types';
 import { CommandDefinition } from '../../vscode/webview-types';
 import {
     CDTTreeItem,
@@ -25,6 +27,7 @@ import {
     CDTTreeTableStringColumn,
     CDTTreeWebviewContext
 } from '../common/index';
+import { CDTTreeMessengerType } from '../common/tree-messenger-types';
 import ActionCell from './components/cells/ActionCell';
 import StringCell from './components/cells/StringCell';
 import { ExpandIcon } from './components/expand-icon';
@@ -238,12 +241,31 @@ export const CDTTree = <T extends CDTTreeItemResource>(props: CDTTreeProps<T>) =
         }
     }, []);
 
-    const onSearchShow = useCallback(() => setGlobalSearchText(globalSearchRef.current?.value()), []);
+    const notifySearchChanged = useCallback((text: string) => {
+        messenger.sendNotification(CDTTreeMessengerType.searchChanged, HOST_EXTENSION, { data: { text } });
+    }, []);
+
+    const onSearchShow = useCallback(() => {
+        const text = globalSearchRef.current?.value() ?? '';
+        setGlobalSearchText(text);
+        notifySearchChanged(text);
+    }, [notifySearchChanged]);
+
     const onSearchHide = useCallback(() => {
         setGlobalSearchText(undefined);
         autoSelectRowRef.current = true;
-    }, [autoSelectRowRef]);
-    const onSearchChange = useMemo(() => debounce(300, (text: string) => setGlobalSearchText(text)), []);
+
+        notifySearchChanged('');
+    }, [notifySearchChanged]);
+
+    const onSearchChange = useMemo(
+        () =>
+            debounce(300, (text: string) => {
+                setGlobalSearchText(text);
+                notifySearchChanged(text);
+            }),
+        [notifySearchChanged]
+    );
 
     // ==== Selection ====
 

@@ -18,6 +18,8 @@ export abstract class CDTTreeWebviewViewProvider<TNode> implements vscode.Webvie
     public readonly onDidExecuteCommand = this.onDidExecuteCommandEvent.event;
     protected onDidClickNodeEvent = new vscode.EventEmitter<CDTTreeNotification<string>>();
     public readonly onDidClickNode = this.onDidClickNodeEvent.event;
+    protected onDidSearchChangedEvent = new vscode.EventEmitter<CDTTreeNotification<{ text: string }>>();
+    public readonly onDidSearchChanged = this.onDidSearchChangedEvent.event;
 
     protected get extensionUri(): vscode.Uri {
         return this.context.extensionUri;
@@ -118,6 +120,9 @@ export abstract class CDTTreeWebviewViewProvider<TNode> implements vscode.Webvie
                 sender: participant
             }),
             this.messenger.onNotification(CDTTreeMessengerType.clickNode, event => this.onDidClickNodeEvent.fire(event), {
+                sender: participant
+            }),
+            this.messenger.onNotification(CDTTreeMessengerType.searchChanged, event => this.onDidSearchChangedEvent.fire(event), {
                 sender: participant
             })
         ];
