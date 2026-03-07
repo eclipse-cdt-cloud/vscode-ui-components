@@ -58,9 +58,11 @@ export function createLabelWithTooltip(child: React.JSX.Element, tooltip?: strin
         <Tooltip>
             <TooltipTrigger>{label}</TooltipTrigger>
             <TooltipContent>
-                <Markdown className='markdown' remarkPlugins={[remarkGfm]}>
-                    {tooltip}
-                </Markdown>
+                <div className='markdown'>
+                    <Markdown remarkPlugins={[remarkGfm]}>
+                        {tooltip}
+                    </Markdown>
+                </div>
             </TooltipContent>
         </Tooltip>
     );
