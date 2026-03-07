@@ -1,16 +1,14 @@
 /**********************************************************************************
- * Copyright (c) 2025 EclipseSource and others.
+ * Copyright (c) 2025-2026 EclipseSource, Arm Limited and others.
  *
  * This program and the accompanying materials are made available under the
- * terms of the MIT License as outlined in the LICENSE file.
+ * terms of the MIT License as outlined in the LICENSE File
  **********************************************************************************/
 
 import eslint from '@eslint/js';
-import header from 'eslint-plugin-header';
+import headers from 'eslint-plugin-headers';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-
-header.rules.header.meta.schema = false;
 
 export default [
     {
@@ -82,27 +80,37 @@ export default [
         }
     },
     {
-        name: 'header',
+        name: 'headers',
         files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs'],
         plugins: {
-            header
+            headers: headers
         },
         rules: {
-            'header/header': [
-                2,
-                'block',
-                [
-                    {
-                        pattern: '[\n\r]+ \\* Copyright \\([cC]\\) \\d{4}(-\\d{4})? .*[\n\r]+',
-                        template: `*********************************************************************************
-* Copyright (c) ${new Date().getFullYear()} Company and others.
-*
-* This program and the accompanying materials are made available under the
-* terms of the MIT License as outlined in the LICENSE file.
-*********************************************************************************`
+            'headers/header-format': [
+                'error',
+                {
+                    source: 'string',
+                    style: 'jsdoc',
+                    blockPrefix: '(line)\n',
+                    blockSuffix: '\n (line)',
+                    content: '(copyright)\n\nThis program and the accompanying materials are made available under the\nterms of the MIT License as outlined in the LICENSE (file)',
+                    trailingNewlines: 2,
+                    preservePragmas: true,
+                    patterns: {
+                        copyright: {
+                            pattern: 'Copyright \\([cC]\\) \\d{4}(-\\d{4})? .* and others\\.?',
+                            defaultValue: `Copyright (c) ${new Date().getFullYear()} Company and others.`
+                        },
+                        file: {
+                            pattern: '[fF]ile\\.?',
+                            defaultValue: 'File'
+                        },
+                        line: {
+                            pattern: '\\*+',
+                            defaultValue: '*******************************************************************************'
+                        }
                     }
-                ],
-                2
+                }
             ]
         }
     }
