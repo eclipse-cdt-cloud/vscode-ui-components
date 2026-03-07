@@ -12,12 +12,12 @@ import tseslint from 'typescript-eslint';
 
 header.rules.header.meta.schema = false;
 
-export default tseslint.config(
+export default [
     {
-        ignores: ['**/node_modules', '**/lib']
+        ignores: ['**/node_modules', '**/lib'],
     },
     eslint.configs.recommended,
-    tseslint.configs.recommended,
+    ...tseslint.configs.recommended,
     {
         languageOptions: {
             globals: {
@@ -25,9 +25,7 @@ export default tseslint.config(
                 ...globals.commonjs,
                 ...globals.node
             }
-        }
-    },
-    {
+        },
         rules: {
             // ESLint Convention
             quotes: ['error', 'single'],
@@ -108,4 +106,4 @@ export default tseslint.config(
             ]
         }
     }
-);
+];
