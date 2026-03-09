@@ -69,7 +69,7 @@ export class TreeDataProvider implements CDTTreeDataProvider<Example, ExampleDTO
             webview.onDidToggleNode(event => {
                 // Handle toggle
             }),
-            webview.onDidSearchChanged(event => {
+            webview.onDidSearchChange(event => {
                 // Handle search input changes
             })
         );
