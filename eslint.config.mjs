@@ -2,7 +2,7 @@
  * Copyright (c) 2025-2026 EclipseSource, Arm Limited and others.
  *
  * This program and the accompanying materials are made available under the
- * terms of the MIT License as outlined in the LICENSE File
+ * terms of the MIT License as outlined in the LICENSE file.
  **********************************************************************************/
 
 import eslint from '@eslint/js';
