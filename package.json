@@ -30,9 +30,9 @@
         "react-markdown": "^10.1.0",
         "remark-gfm": "^4.0.1",
         "throttle-debounce": "5.0.2",
-        "vscode-messenger": "^0.6.0",
-        "vscode-messenger-common": "^0.6.0",
-        "vscode-messenger-webview": "^0.6.0"
+        "vscode-messenger": "^0.4.5",
+        "vscode-messenger-common": "^0.4.5",
+        "vscode-messenger-webview": "^0.4.5"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
