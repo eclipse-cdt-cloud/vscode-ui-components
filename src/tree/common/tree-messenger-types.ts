@@ -45,4 +45,5 @@ export namespace CDTTreeMessengerType {
     export const toggleNode: NotificationType<CDTTreeNotification<string>> = { method: 'toggleNode' };
     export const clickNode: NotificationType<CDTTreeNotification<string>> = { method: 'clickNode' };
     export const openSearch: NotificationType<void> = { method: 'openSearch' };
+    export const searchChanged: NotificationType<CDTTreeNotification<{ text: string }>> = { method: 'searchChanged' };
 }
