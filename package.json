@@ -1,6 +1,6 @@
 {
     "name": "@eclipse-cdt-cloud/vscode-ui-components",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "UI Components for Visual Studio Code Extensions",
     "repository": "https://github.com/eclipse-cdt-cloud/vscode-ui-components",
     "license": "MIT",
