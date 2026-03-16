@@ -61,6 +61,17 @@ export type CDTTreeProps<T extends CDTTreeItemResource = CDTTreeItemResource> = 
      */
     dataSourceSorter?: (dataSource: CDTTreeItem<T>[]) => CDTTreeItem<T>[];
     /**
+     * Configuration for search behavior.
+     */
+    search?: {
+        /**
+         * Search mode.
+         * - 'client': filter locally in the webview (default)
+         * - 'backend': keep current content until backend returns updated data
+         */
+        mode?: 'client' | 'backend';
+    };
+    /**
      * Configuration for the expansion of the tree table.
      */
     expansion?: {
@@ -218,18 +229,20 @@ export const CDTTree = <T extends CDTTreeItemResource>(props: CDTTreeProps<T>) =
     const ref = React.useRef<HTMLDivElement | null>(null);
     const tblRef: Parameters<typeof Table>[0]['ref'] = React.useRef(null);
 
+    const isBackendSearch = props.search?.mode === 'backend';
+
     // ==== Data ====
 
     const filteredData = useMemo(() => {
         let data = props.dataSource ?? [];
-        if (globalSearchText) {
+        if (globalSearchText && !isBackendSearch) {
             data = filterTree(data, globalSearchText);
         }
         if (props.dataSourceSorter) {
             data = props.dataSourceSorter([...data]);
         }
         return data;
-    }, [props.dataSource, props.dataSourceSorter, globalSearchText]);
+    }, [props.dataSource, props.dataSourceSorter, globalSearchText, isBackendSearch]);
 
     // ==== Search ====
 
@@ -260,7 +273,7 @@ export const CDTTree = <T extends CDTTreeItemResource>(props: CDTTreeProps<T>) =
 
     const onSearchChange = useMemo(
         () =>
-            debounce(300, (text: string) => {
+            debounce(600, (text: string) => {
                 setGlobalSearchText(text);
                 notifySearchChanged(text);
             }),
@@ -285,18 +298,20 @@ export const CDTTree = <T extends CDTTreeItemResource>(props: CDTTreeProps<T>) =
 
     const expandedRowKeys = useMemo(() => {
         const expanded = new Set(props.expansion?.expandedRowKeys ?? []);
-        if (globalSearchText) {
+        if (globalSearchText && !isBackendSearch) {
+            // client-side search:
             // on search expand all nodes that match the search
             const matchingExpansion = traverseTree(filteredData, { predicate: item => item.matching ?? false, mapper: getAncestors });
             matchingExpansion.forEach(ancestorHierarchy => ancestorHierarchy.forEach(ancestor => expanded.add(ancestor.key)));
         } else {
+            // normal mode or backend-search mode:
             // otherwise use the expandedRowKeys from the props but ensure that the selected element is also expanded
             if (autoSelectRowRef.current && selection) {
                 getAncestors(selection).forEach(ancestor => expanded.add(ancestor.key));
             }
         }
         return Array.from(expanded);
-    }, [filteredData, globalSearchText, props.expansion?.expandedRowKeys, selection, autoSelectRowRef.current]);
+    }, [filteredData, globalSearchText, isBackendSearch, props.expansion?.expandedRowKeys, selection, autoSelectRowRef.current]);
 
     const handleExpand = useCallback(
         (expanded: boolean, record: CDTTreeItem<T>) => {
