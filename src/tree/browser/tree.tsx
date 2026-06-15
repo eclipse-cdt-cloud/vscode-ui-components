@@ -8,7 +8,7 @@
 import '../../../style/tree/tree-common.css';
 import '../../../style/tree/tree.css';
 
-import { ConfigProvider, Table } from 'antd';
+import { ConfigProvider, Spin, Table } from 'antd';
 import { ColumnType, ExpandableConfig } from 'antd/es/table/interface';
 import classNames from 'classnames';
 import { Resizable } from 're-resizable';
@@ -56,6 +56,11 @@ export type CDTTreeProps<T extends CDTTreeItemResource = CDTTreeItemResource> = 
      * Data source to be rendered.
      */
     dataSource?: CDTTreeItem<T>[];
+    /**
+     * Whether the tree data is still loading.
+     * Defaults to true while the data source or column definitions are undefined.
+     */
+    loading?: boolean;
     /**
      * Function to sort the data source.
      */
@@ -230,6 +235,7 @@ export const CDTTree = <T extends CDTTreeItemResource>(props: CDTTreeProps<T>) =
     const tblRef: Parameters<typeof Table>[0]['ref'] = React.useRef(null);
 
     const isBackendSearch = props.search?.mode === 'backend';
+    const loading = props.loading ?? (props.dataSource === undefined || props.columnDefinitions === undefined);
 
     // ==== Data ====
 
@@ -661,7 +667,16 @@ export const CDTTree = <T extends CDTTreeItemResource>(props: CDTTreeProps<T>) =
                     cssVar: true,
                     hashed: false
                 }}
-                renderEmpty={() => <div className={'empty-message'}>No data available.</div>}
+                renderEmpty={() =>
+                    loading ? (
+                        <div className={'empty-message loading-message'} role='status' aria-label='Loading data'>
+                            <Spin size='small' />
+                            <span className={'loading-message-text'}>Loading…</span>
+                        </div>
+                    ) : (
+                        <div className={'empty-message'}>No data available.</div>
+                    )
+                }
             >
                 <div ref={ref} tabIndex={-1} style={{ outline: 'none' }} onKeyDown={onTableKeyDown}>
                     <Table<CDTTreeItem<T>>

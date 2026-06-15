@@ -93,7 +93,7 @@
     padding-right: 8px;
 }
 
-.ant-table .tree-actions > i {
+.ant-table .tree-actions>i {
     cursor: pointer;
 }
 
@@ -106,6 +106,14 @@
     display: inline-block;
     padding-top: 4em;
     color: var(--vscode-editor-foreground);
+}
+
+.ant-table-empty .loading-message .ant-spin-dot-item {
+    background-color: var(--vscode-progressBar-background, var(--vscode-editor-foreground));
+}
+
+.ant-table-empty .loading-message .loading-message-text {
+    margin-left: 0.5em;
 }
 
 .ant-table-empty .ant-table-body {
