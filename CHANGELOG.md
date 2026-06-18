@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.2.0
+- Updates [Tree](./src/tree/README.md) component:
+    - Change `No data available` message to spinning wheel with `Loading...`
+      label while loading a tree.
+- chore: Updated dependencies
+
 ## 0.1.0
 - Updates [Tree](./src/tree/README.md) component:
     - Adds optional support for search in data backend implementation.
